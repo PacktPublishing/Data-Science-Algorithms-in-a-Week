@@ -1,0 +1,12 @@
+Temperature,Wind,Season,Play
+Cold,Strong,Winter,No
+Warm,Strong,Autumn,No
+Warm,None,Summer,Yes
+Hot,None,Spring,No
+Hot,Breeze,Autumn,Yes
+Warm,Breeze,Spring,Yes
+Cold,Breeze,Winter,No
+Cold,None,Spring,Yes
+Hot,Strong,Summer,Yes
+Warm,None,Autumn,Yes
+Warm,Strong,Spring,?

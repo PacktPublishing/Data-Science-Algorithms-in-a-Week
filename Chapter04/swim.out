@@ -1,0 +1,118 @@
+We are given M=3 variables according to which a feature can be classified. In random forest algorithm we usually do not use all 3 variables to form tree branches at each node. We use only m variables out of M. So we choose m such that m is less than or equal to M. The greater m is, a stronger classifier an individual tree constructed is. However, it is more susceptible to a bias as more of the data is considered. Since we in the end use multiple trees, even if each may be a weak classifier, their combined classification accuracy is strong. Therefore as we want to reduce a bias in a random forest, we may want to consider to choose a parameter m to be slightly less than M.
+Thus we choose the maximum number of the variables considered at the node to be m=min(M,math.ceil(2*math.sqrt(M)))=min(M,math.ceil(2*math.sqrt(3)))=3.
+We are given the following features:
+[['None', 'Cold', 'No'], ['None', 'Warm', 'No'], ['Small', 'Cold', 'No'], ['Small', 'Warm', 'No'], ['Good', 'Cold', 'No'], ['Good', 'Warm', 'Yes']]
+When constructing a random decision tree as a part of a random forest, we will choose only a subset out of them in a random way with the replacement.
+
+*** Random Forest construction ***
+We construct a random forest that will consist of 2 random decision trees.
+
+Construction of a random decision tree number 0:
+We are given 6 features as the input data. Out of these, we choose randomly 6 features with the replacement that we will use for the construction of this particular random decision tree:
+[['None', 'Warm', 'No'], ['None', 'Warm', 'No'], ['Small', 'Cold', 'No'], ['Good', 'Cold', 'No'], ['Good', 'Cold', 'No'], ['Good', 'Cold', 'No']]
+We start the construction with the root node to create the first node of the tree.
+We would like to add children to the node [root].
+The available variables that we have still left are ['swimming_suit', 'water_temperature']. As there are fewer of them than the parameter m=3, we consider all of them. Out of these variables, the variable with the highest information gain is the variable swimming_suit. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. Using the variable swimming_suit we partition the data in the current node, where each partition of the data will be for one of the new branches from the current node [root]. We have the following partitions:
+Partition for swimming_suit=Small: [['Small', 'Cold', 'No']]
+Partition for swimming_suit=None: [['None', 'Warm', 'No'], ['None', 'Warm', 'No']]
+Partition for swimming_suit=Good: [['Good', 'Cold', 'No'], ['Good', 'Cold', 'No'], ['Good', 'Cold', 'No']]
+Now, given the partitions, let us form the branches and the child nodes.
+
+We add a child node [swimming_suit=Small] to the node [root]. This branch classifies 1 feature(s): [['Small', 'Cold', 'No']]
+We would like to add children to the node [swimming_suit=Small].
+The available variables that we have still left are ['water_temperature']. As there are fewer of them than the parameter m=3, we consider all of them. Out of these variables, the variable with the highest information gain is the variable water_temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable water_temperature all the remaining features have the same value Cold. Thus we close the branch with a leaf node. We add the leaf node [swim=No].
+
+We add a child node [swimming_suit=None] to the node [root]. This branch classifies 2 feature(s): [['None', 'Warm', 'No'], ['None', 'Warm', 'No']]
+We would like to add children to the node [swimming_suit=None].
+The available variables that we have still left are ['water_temperature']. As there are fewer of them than the parameter m=3, we consider all of them. Out of these variables, the variable with the highest information gain is the variable water_temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable water_temperature all the remaining features have the same value Warm. Thus we close the branch with a leaf node. We add the leaf node [swim=No].
+
+We add a child node [swimming_suit=Good] to the node [root]. This branch classifies 3 feature(s): [['Good', 'Cold', 'No'], ['Good', 'Cold', 'No'], ['Good', 'Cold', 'No']]
+We would like to add children to the node [swimming_suit=Good].
+The available variables that we have still left are ['water_temperature']. As there are fewer of them than the parameter m=3, we consider all of them. Out of these variables, the variable with the highest information gain is the variable water_temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable water_temperature all the remaining features have the same value Cold. Thus we close the branch with a leaf node. We add the leaf node [swim=No].
+
+Now, we have added all the children nodes for the node [root].
+
+Construction of a random decision tree number 1:
+We are given 6 features as the input data. Out of these, we choose randomly 6 features with the replacement that we will use for the construction of this particular random decision tree:
+[['Good', 'Warm', 'Yes'], ['None', 'Warm', 'No'], ['Good', 'Cold', 'No'], ['None', 'Cold', 'No'], ['None', 'Warm', 'No'], ['Small', 'Warm', 'No']]
+We start the construction with the root node to create the first node of the tree.
+We would like to add children to the node [root].
+The available variables that we have still left are ['swimming_suit', 'water_temperature']. As there are fewer of them than the parameter m=3, we consider all of them. Out of these variables, the variable with the highest information gain is the variable swimming_suit. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. Using the variable swimming_suit we partition the data in the current node, where each partition of the data will be for one of the new branches from the current node [root]. We have the following partitions:
+Partition for swimming_suit=Small: [['Small', 'Warm', 'No']]
+Partition for swimming_suit=None: [['None', 'Warm', 'No'], ['None', 'Cold', 'No'], ['None', 'Warm', 'No']]
+Partition for swimming_suit=Good: [['Good', 'Warm', 'Yes'], ['Good', 'Cold', 'No']]
+Now, given the partitions, let us form the branches and the child nodes.
+
+We add a child node [swimming_suit=Small] to the node [root]. This branch classifies 1 feature(s): [['Small', 'Warm', 'No']]
+We would like to add children to the node [swimming_suit=Small].
+The available variables that we have still left are ['water_temperature']. As there are fewer of them than the parameter m=3, we consider all of them. Out of these variables, the variable with the highest information gain is the variable water_temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable water_temperature all the remaining features have the same value Warm. Thus we close the branch with a leaf node. We add the leaf node [swim=No].
+
+We add a child node [swimming_suit=None] to the node [root]. This branch classifies 3 feature(s): [['None', 'Warm', 'No'], ['None', 'Cold', 'No'], ['None', 'Warm', 'No']]
+We would like to add children to the node [swimming_suit=None].
+The available variables that we have still left are ['water_temperature']. As there are fewer of them than the parameter m=3, we consider all of them. Out of these variables, the variable with the highest information gain is the variable water_temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. Using the variable water_temperature we partition the data in the current node, where each partition of the data will be for one of the new branches from the current node [swimming_suit=None]. We have the following partitions:
+Partition for water_temperature=Cold: [['None', 'Cold', 'No']]
+Partition for water_temperature=Warm: [['None', 'Warm', 'No'], ['None', 'Warm', 'No']]
+Now, given the partitions, let us form the branches and the child nodes.
+
+We add a child node [water_temperature=Cold] to the node [swimming_suit=None]. This branch classifies 1 feature(s): [['None', 'Cold', 'No']]
+We do not have any available variables on which we could split the node further, therefore we add a leaf node to the current branch of the tree. We add the leaf node [swim=No].
+
+We add a child node [water_temperature=Warm] to the node [swimming_suit=None]. This branch classifies 2 feature(s): [['None', 'Warm', 'No'], ['None', 'Warm', 'No']]
+We do not have any available variables on which we could split the node further, therefore we add a leaf node to the current branch of the tree. We add the leaf node [swim=No].
+
+Now, we have added all the children nodes for the node [swimming_suit=None].
+
+We add a child node [swimming_suit=Good] to the node [root]. This branch classifies 2 feature(s): [['Good', 'Warm', 'Yes'], ['Good', 'Cold', 'No']]
+We would like to add children to the node [swimming_suit=Good].
+The available variables that we have still left are ['water_temperature']. As there are fewer of them than the parameter m=3, we consider all of them. Out of these variables, the variable with the highest information gain is the variable water_temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. Using the variable water_temperature we partition the data in the current node, where each partition of the data will be for one of the new branches from the current node [swimming_suit=Good]. We have the following partitions:
+Partition for water_temperature=Cold: [['Good', 'Cold', 'No']]
+Partition for water_temperature=Warm: [['Good', 'Warm', 'Yes']]
+Now, given the partitions, let us form the branches and the child nodes.
+
+We add a child node [water_temperature=Cold] to the node [swimming_suit=Good]. This branch classifies 1 feature(s): [['Good', 'Cold', 'No']]
+We do not have any available variables on which we could split the node further, therefore we add a leaf node to the current branch of the tree. We add the leaf node [swim=No].
+
+We add a child node [water_temperature=Warm] to the node [swimming_suit=Good]. This branch classifies 1 feature(s): [['Good', 'Warm', 'Yes']]
+We do not have any available variables on which we could split the node further, therefore we add a leaf node to the current branch of the tree. We add the leaf node [swim=Yes].
+
+Now, we have added all the children nodes for the node [swimming_suit=Good].
+
+Now, we have added all the children nodes for the node [root].
+
+Therefore we have completed the construction of the random forest consisting of 2 random decision trees.
+
+***Random Forest graph***
+
+Tree 0:
+Root
+├── [swimming_suit=Small]
+│   └── [swim=No]
+├── [swimming_suit=None]
+│   └── [swim=No]
+└── [swimming_suit=Good]
+    └── [swim=No]
+
+Tree 1:
+Root
+├── [swimming_suit=Small]
+│   └── [swim=No]
+├── [swimming_suit=None]
+│   ├── [water_temperature=Cold]
+│   │   └── [swim=No]
+│   └── [water_temperature=Warm]
+│       └── [swim=No]
+└── [swimming_suit=Good]
+    ├── [water_temperature=Cold]
+    │   └── [swim=No]
+    └── [water_temperature=Warm]
+        └── [swim=Yes]
+
+Total number of trees in the random forest=2.
+The maximum number of the variables considered at the node is m=3.
+
+***Classification***
+Since for the construction of a random decision tree we use only a subset of the original data, we may not have enough features to form a full tree that is able to classify every feature. In such a case a tree will not return any class for a particular feature that should be classified. Thus we will only consider trees that actually classify a feature to some specific class.
+Feature: ['Good', 'Cold', '?']
+Tree 0 votes for the class: No
+Tree 1 votes for the class: No
+The class with the maximum number of votes is 'No'. Thus the constructed random forest classifies the feature ['Good', 'Cold', '?'] into the class 'No'.

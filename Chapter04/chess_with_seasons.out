@@ -1,0 +1,345 @@
+We are given M=4 variables according to which a feature can be classified. Thus we choose the maximum number of the variables considered at the node to be m=min(M,math.ceil(2*math.sqrt(M)))=min(M,math.ceil(2*math.sqrt(4)))=4.
+We are given the following features:
+[['Cold', 'Strong', 'Winter', 'No'], ['Warm', 'Strong', 'Autumn', 'No'], ['Warm', 'None', 'Summer', 'Yes'], ['Hot', 'None', 'Spring', 'No'], ['Hot', 'Breeze', 'Autumn', 'Yes'], ['Warm', 'Breeze', 'Spring', 'Yes'], ['Cold', 'Breeze', 'Winter', 'No'], ['Cold', 'None', 'Spring', 'Yes'], ['Hot', 'Strong', 'Summer', 'Yes'], ['Warm', 'None', 'Autumn', 'Yes']]
+When constructing a random decision tree as a part of a random forest, we will choose only a subset out of them in a random way with the replacement.
+
+*** Random Forest construction ***
+We construct a random forest that will consist of 4 random decision trees.
+
+Construction of a random decision tree number 0:
+We are given 10 features as the input data. Out of these, we choose randomly 10 features with the replacement that we will use for the construction of this particular random decision tree:
+[['Cold', 'Strong', 'Winter', 'No'], ['Warm', 'None', 'Summer', 'Yes'], ['Cold', 'Strong', 'Winter', 'No'], ['Warm', 'None', 'Summer', 'Yes'], ['Warm', 'None', 'Autumn', 'Yes'], ['Cold', 'Strong', 'Winter', 'No'], ['Warm', 'None', 'Summer', 'Yes'], ['Cold', 'None', 'Spring', 'Yes'], ['Warm', 'Strong', 'Autumn', 'No'], ['Warm', 'Strong', 'Autumn', 'No']]
+We start the construction with the root node to create the first node of the tree.
+We would like to add children to the node [root].
+The available variables that we have still left are ['Temperature', 'Wind', 'Season']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Wind. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. Using the variable Wind we partition the data in the current node, where each partition of the data will be for one of the new branches from the current node [root]. We have the following partitions:
+Partition for Wind=None: [['Warm', 'None', 'Summer', 'Yes'], ['Warm', 'None', 'Summer', 'Yes'], ['Warm', 'None', 'Autumn', 'Yes'], ['Warm', 'None', 'Summer', 'Yes'], ['Cold', 'None', 'Spring', 'Yes']]
+Partition for Wind=Strong: [['Cold', 'Strong', 'Winter', 'No'], ['Cold', 'Strong', 'Winter', 'No'], ['Cold', 'Strong', 'Winter', 'No'], ['Warm', 'Strong', 'Autumn', 'No'], ['Warm', 'Strong', 'Autumn', 'No']]
+Now, given the partitions, let us form the branches and the child nodes.
+
+We add a child node [Wind=None] to the node [root]. This branch classifies 5 feature(s): [['Warm', 'None', 'Summer', 'Yes'], ['Warm', 'None', 'Summer', 'Yes'], ['Warm', 'None', 'Autumn', 'Yes'], ['Warm', 'None', 'Summer', 'Yes'], ['Cold', 'None', 'Spring', 'Yes']]
+We would like to add children to the node [Wind=None].
+The available variables that we have still left are ['Temperature', 'Season']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. Using the variable Temperature we partition the data in the current node, where each partition of the data will be for one of the new branches from the current node [Wind=None]. We have the following partitions:
+Partition for Temperature=Cold: [['Cold', 'None', 'Spring', 'Yes']]
+Partition for Temperature=Warm: [['Warm', 'None', 'Summer', 'Yes'], ['Warm', 'None', 'Summer', 'Yes'], ['Warm', 'None', 'Autumn', 'Yes'], ['Warm', 'None', 'Summer', 'Yes']]
+Now, given the partitions, let us form the branches and the child nodes.
+
+We add a child node [Temperature=Cold] to the node [Wind=None]. This branch classifies 1 feature(s): [['Cold', 'None', 'Spring', 'Yes']]
+We would like to add children to the node [Temperature=Cold].
+The available variables that we have still left are ['Season']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Season. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Season all the remaining features have the same value Spring. Thus we close the branch with a leaf node. We add the leaf node [Play=Yes].
+
+We add a child node [Temperature=Warm] to the node [Wind=None]. This branch classifies 4 feature(s): [['Warm', 'None', 'Summer', 'Yes'], ['Warm', 'None', 'Summer', 'Yes'], ['Warm', 'None', 'Autumn', 'Yes'], ['Warm', 'None', 'Summer', 'Yes']]
+We would like to add children to the node [Temperature=Warm].
+The available variables that we have still left are ['Season']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Season. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. Using the variable Season we partition the data in the current node, where each partition of the data will be for one of the new branches from the current node [Temperature=Warm]. We have the following partitions:
+Partition for Season=Autumn: [['Warm', 'None', 'Autumn', 'Yes']]
+Partition for Season=Summer: [['Warm', 'None', 'Summer', 'Yes'], ['Warm', 'None', 'Summer', 'Yes'], ['Warm', 'None', 'Summer', 'Yes']]
+Now, given the partitions, let us form the branches and the child nodes.
+
+We add a child node [Season=Autumn] to the node [Temperature=Warm]. This branch classifies 1 feature(s): [['Warm', 'None', 'Autumn', 'Yes']]
+We do not have any available variables on which we could split the node further, therefore we add a leaf node to the current branch of the tree. We add the leaf node [Play=Yes].
+
+We add a child node [Season=Summer] to the node [Temperature=Warm]. This branch classifies 3 feature(s): [['Warm', 'None', 'Summer', 'Yes'], ['Warm', 'None', 'Summer', 'Yes'], ['Warm', 'None', 'Summer', 'Yes']]
+We do not have any available variables on which we could split the node further, therefore we add a leaf node to the current branch of the tree. We add the leaf node [Play=Yes].
+
+Now, we have added all the children nodes for the node [Temperature=Warm].
+
+Now, we have added all the children nodes for the node [Wind=None].
+
+We add a child node [Wind=Strong] to the node [root]. This branch classifies 5 feature(s): [['Cold', 'Strong', 'Winter', 'No'], ['Cold', 'Strong', 'Winter', 'No'], ['Cold', 'Strong', 'Winter', 'No'], ['Warm', 'Strong', 'Autumn', 'No'], ['Warm', 'Strong', 'Autumn', 'No']]
+We would like to add children to the node [Wind=Strong].
+The available variables that we have still left are ['Temperature', 'Season']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. Using the variable Temperature we partition the data in the current node, where each partition of the data will be for one of the new branches from the current node [Wind=Strong]. We have the following partitions:
+Partition for Temperature=Cold: [['Cold', 'Strong', 'Winter', 'No'], ['Cold', 'Strong', 'Winter', 'No'], ['Cold', 'Strong', 'Winter', 'No']]
+Partition for Temperature=Warm: [['Warm', 'Strong', 'Autumn', 'No'], ['Warm', 'Strong', 'Autumn', 'No']]
+Now, given the partitions, let us form the branches and the child nodes.
+
+We add a child node [Temperature=Cold] to the node [Wind=Strong]. This branch classifies 3 feature(s): [['Cold', 'Strong', 'Winter', 'No'], ['Cold', 'Strong', 'Winter', 'No'], ['Cold', 'Strong', 'Winter', 'No']]
+We would like to add children to the node [Temperature=Cold].
+The available variables that we have still left are ['Season']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Season. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Season all the remaining features have the same value Winter. Thus we close the branch with a leaf node. We add the leaf node [Play=No].
+
+We add a child node [Temperature=Warm] to the node [Wind=Strong]. This branch classifies 2 feature(s): [['Warm', 'Strong', 'Autumn', 'No'], ['Warm', 'Strong', 'Autumn', 'No']]
+We would like to add children to the node [Temperature=Warm].
+The available variables that we have still left are ['Season']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Season. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Season all the remaining features have the same value Autumn. Thus we close the branch with a leaf node. We add the leaf node [Play=No].
+
+Now, we have added all the children nodes for the node [Wind=Strong].
+
+Now, we have added all the children nodes for the node [root].
+
+Construction of a random decision tree number 1:
+We are given 10 features as the input data. Out of these, we choose randomly 10 features with the replacement that we will use for the construction of this particular random decision tree:
+[['Hot', 'Breeze', 'Autumn', 'Yes'], ['Cold', 'Breeze', 'Winter', 'No'], ['Warm', 'None', 'Autumn', 'Yes'], ['Warm', 'Strong', 'Autumn', 'No'], ['Warm', 'None', 'Summer', 'Yes'], ['Cold', 'Strong', 'Winter', 'No'], ['Warm', 'Breeze', 'Spring', 'Yes'], ['Cold', 'Breeze', 'Winter', 'No'], ['Cold', 'None', 'Spring', 'Yes'], ['Warm', 'None', 'Autumn', 'Yes']]
+We start the construction with the root node to create the first node of the tree.
+We would like to add children to the node [root].
+The available variables that we have still left are ['Temperature', 'Wind', 'Season']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Season. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. Using the variable Season we partition the data in the current node, where each partition of the data will be for one of the new branches from the current node [root]. We have the following partitions:
+Partition for Season=Autumn: [['Hot', 'Breeze', 'Autumn', 'Yes'], ['Warm', 'None', 'Autumn', 'Yes'], ['Warm', 'Strong', 'Autumn', 'No'], ['Warm', 'None', 'Autumn', 'Yes']]
+Partition for Season=Summer: [['Warm', 'None', 'Summer', 'Yes']]
+Partition for Season=Winter: [['Cold', 'Breeze', 'Winter', 'No'], ['Cold', 'Strong', 'Winter', 'No'], ['Cold', 'Breeze', 'Winter', 'No']]
+Partition for Season=Spring: [['Warm', 'Breeze', 'Spring', 'Yes'], ['Cold', 'None', 'Spring', 'Yes']]
+Now, given the partitions, let us form the branches and the child nodes.
+
+We add a child node [Season=Autumn] to the node [root]. This branch classifies 4 feature(s): [['Hot', 'Breeze', 'Autumn', 'Yes'], ['Warm', 'None', 'Autumn', 'Yes'], ['Warm', 'Strong', 'Autumn', 'No'], ['Warm', 'None', 'Autumn', 'Yes']]
+We would like to add children to the node [Season=Autumn].
+The available variables that we have still left are ['Temperature', 'Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Wind. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. Using the variable Wind we partition the data in the current node, where each partition of the data will be for one of the new branches from the current node [Season=Autumn]. We have the following partitions:
+Partition for Wind=Strong: [['Warm', 'Strong', 'Autumn', 'No']]
+Partition for Wind=None: [['Warm', 'None', 'Autumn', 'Yes'], ['Warm', 'None', 'Autumn', 'Yes']]
+Partition for Wind=Breeze: [['Hot', 'Breeze', 'Autumn', 'Yes']]
+Now, given the partitions, let us form the branches and the child nodes.
+
+We add a child node [Wind=Strong] to the node [Season=Autumn]. This branch classifies 1 feature(s): [['Warm', 'Strong', 'Autumn', 'No']]
+We would like to add children to the node [Wind=Strong].
+The available variables that we have still left are ['Temperature']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Temperature all the remaining features have the same value Warm. Thus we close the branch with a leaf node. We add the leaf node [Play=No].
+
+We add a child node [Wind=None] to the node [Season=Autumn]. This branch classifies 2 feature(s): [['Warm', 'None', 'Autumn', 'Yes'], ['Warm', 'None', 'Autumn', 'Yes']]
+We would like to add children to the node [Wind=None].
+The available variables that we have still left are ['Temperature']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Temperature all the remaining features have the same value Warm. Thus we close the branch with a leaf node. We add the leaf node [Play=Yes].
+
+We add a child node [Wind=Breeze] to the node [Season=Autumn]. This branch classifies 1 feature(s): [['Hot', 'Breeze', 'Autumn', 'Yes']]
+We would like to add children to the node [Wind=Breeze].
+The available variables that we have still left are ['Temperature']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Temperature all the remaining features have the same value Hot. Thus we close the branch with a leaf node. We add the leaf node [Play=Yes].
+
+Now, we have added all the children nodes for the node [Season=Autumn].
+
+We add a child node [Season=Summer] to the node [root]. This branch classifies 1 feature(s): [['Warm', 'None', 'Summer', 'Yes']]
+We would like to add children to the node [Season=Summer].
+The available variables that we have still left are ['Temperature', 'Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Temperature all the remaining features have the same value Warm. Thus we close the branch with a leaf node. We add the leaf node [Play=Yes].
+
+We add a child node [Season=Winter] to the node [root]. This branch classifies 3 feature(s): [['Cold', 'Breeze', 'Winter', 'No'], ['Cold', 'Strong', 'Winter', 'No'], ['Cold', 'Breeze', 'Winter', 'No']]
+We would like to add children to the node [Season=Winter].
+The available variables that we have still left are ['Temperature', 'Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Temperature all the remaining features have the same value Cold. Thus we close the branch with a leaf node. We add the leaf node [Play=No].
+
+We add a child node [Season=Spring] to the node [root]. This branch classifies 2 feature(s): [['Warm', 'Breeze', 'Spring', 'Yes'], ['Cold', 'None', 'Spring', 'Yes']]
+We would like to add children to the node [Season=Spring].
+The available variables that we have still left are ['Temperature', 'Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. Using the variable Temperature we partition the data in the current node, where each partition of the data will be for one of the new branches from the current node [Season=Spring]. We have the following partitions:
+Partition for Temperature=Cold: [['Cold', 'None', 'Spring', 'Yes']]
+Partition for Temperature=Warm: [['Warm', 'Breeze', 'Spring', 'Yes']]
+Now, given the partitions, let us form the branches and the child nodes.
+
+We add a child node [Temperature=Cold] to the node [Season=Spring]. This branch classifies 1 feature(s): [['Cold', 'None', 'Spring', 'Yes']]
+We would like to add children to the node [Temperature=Cold].
+The available variables that we have still left are ['Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Wind. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Wind all the remaining features have the same value None. Thus we close the branch with a leaf node. We add the leaf node [Play=Yes].
+
+We add a child node [Temperature=Warm] to the node [Season=Spring]. This branch classifies 1 feature(s): [['Warm', 'Breeze', 'Spring', 'Yes']]
+We would like to add children to the node [Temperature=Warm].
+The available variables that we have still left are ['Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Wind. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Wind all the remaining features have the same value Breeze. Thus we close the branch with a leaf node. We add the leaf node [Play=Yes].
+
+Now, we have added all the children nodes for the node [Season=Spring].
+
+Now, we have added all the children nodes for the node [root].
+
+Construction of a random decision tree number 2:
+We are given 10 features as the input data. Out of these, we choose randomly 10 features with the replacement that we will use for the construction of this particular random decision tree:
+[['Cold', 'None', 'Spring', 'Yes'], ['Hot', 'Breeze', 'Autumn', 'Yes'], ['Warm', 'Strong', 'Autumn', 'No'], ['Cold', 'Breeze', 'Winter', 'No'], ['Warm', 'Breeze', 'Spring', 'Yes'], ['Cold', 'Strong', 'Winter', 'No'], ['Cold', 'None', 'Spring', 'Yes'], ['Warm', 'Breeze', 'Spring', 'Yes'], ['Warm', 'None', 'Summer', 'Yes'], ['Hot', 'Strong', 'Summer', 'Yes']]
+We start the construction with the root node to create the first node of the tree.
+We would like to add children to the node [root].
+The available variables that we have still left are ['Temperature', 'Wind', 'Season']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Season. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. Using the variable Season we partition the data in the current node, where each partition of the data will be for one of the new branches from the current node [root]. We have the following partitions:
+Partition for Season=Autumn: [['Hot', 'Breeze', 'Autumn', 'Yes'], ['Warm', 'Strong', 'Autumn', 'No']]
+Partition for Season=Spring: [['Cold', 'None', 'Spring', 'Yes'], ['Warm', 'Breeze', 'Spring', 'Yes'], ['Cold', 'None', 'Spring', 'Yes'], ['Warm', 'Breeze', 'Spring', 'Yes']]
+Partition for Season=Winter: [['Cold', 'Breeze', 'Winter', 'No'], ['Cold', 'Strong', 'Winter', 'No']]
+Partition for Season=Summer: [['Warm', 'None', 'Summer', 'Yes'], ['Hot', 'Strong', 'Summer', 'Yes']]
+Now, given the partitions, let us form the branches and the child nodes.
+
+We add a child node [Season=Autumn] to the node [root]. This branch classifies 2 feature(s): [['Hot', 'Breeze', 'Autumn', 'Yes'], ['Warm', 'Strong', 'Autumn', 'No']]
+We would like to add children to the node [Season=Autumn].
+The available variables that we have still left are ['Temperature', 'Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. Using the variable Temperature we partition the data in the current node, where each partition of the data will be for one of the new branches from the current node [Season=Autumn]. We have the following partitions:
+Partition for Temperature=Hot: [['Hot', 'Breeze', 'Autumn', 'Yes']]
+Partition for Temperature=Warm: [['Warm', 'Strong', 'Autumn', 'No']]
+Now, given the partitions, let us form the branches and the child nodes.
+
+We add a child node [Temperature=Hot] to the node [Season=Autumn]. This branch classifies 1 feature(s): [['Hot', 'Breeze', 'Autumn', 'Yes']]
+We would like to add children to the node [Temperature=Hot].
+The available variables that we have still left are ['Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Wind. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Wind all the remaining features have the same value Breeze. Thus we close the branch with a leaf node. We add the leaf node [Play=Yes].
+
+We add a child node [Temperature=Warm] to the node [Season=Autumn]. This branch classifies 1 feature(s): [['Warm', 'Strong', 'Autumn', 'No']]
+We would like to add children to the node [Temperature=Warm].
+The available variables that we have still left are ['Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Wind. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Wind all the remaining features have the same value Strong. Thus we close the branch with a leaf node. We add the leaf node [Play=No].
+
+Now, we have added all the children nodes for the node [Season=Autumn].
+
+We add a child node [Season=Spring] to the node [root]. This branch classifies 4 feature(s): [['Cold', 'None', 'Spring', 'Yes'], ['Warm', 'Breeze', 'Spring', 'Yes'], ['Cold', 'None', 'Spring', 'Yes'], ['Warm', 'Breeze', 'Spring', 'Yes']]
+We would like to add children to the node [Season=Spring].
+The available variables that we have still left are ['Temperature', 'Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. Using the variable Temperature we partition the data in the current node, where each partition of the data will be for one of the new branches from the current node [Season=Spring]. We have the following partitions:
+Partition for Temperature=Cold: [['Cold', 'None', 'Spring', 'Yes'], ['Cold', 'None', 'Spring', 'Yes']]
+Partition for Temperature=Warm: [['Warm', 'Breeze', 'Spring', 'Yes'], ['Warm', 'Breeze', 'Spring', 'Yes']]
+Now, given the partitions, let us form the branches and the child nodes.
+
+We add a child node [Temperature=Cold] to the node [Season=Spring]. This branch classifies 2 feature(s): [['Cold', 'None', 'Spring', 'Yes'], ['Cold', 'None', 'Spring', 'Yes']]
+We would like to add children to the node [Temperature=Cold].
+The available variables that we have still left are ['Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Wind. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Wind all the remaining features have the same value None. Thus we close the branch with a leaf node. We add the leaf node [Play=Yes].
+
+We add a child node [Temperature=Warm] to the node [Season=Spring]. This branch classifies 2 feature(s): [['Warm', 'Breeze', 'Spring', 'Yes'], ['Warm', 'Breeze', 'Spring', 'Yes']]
+We would like to add children to the node [Temperature=Warm].
+The available variables that we have still left are ['Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Wind. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Wind all the remaining features have the same value Breeze. Thus we close the branch with a leaf node. We add the leaf node [Play=Yes].
+
+Now, we have added all the children nodes for the node [Season=Spring].
+
+We add a child node [Season=Winter] to the node [root]. This branch classifies 2 feature(s): [['Cold', 'Breeze', 'Winter', 'No'], ['Cold', 'Strong', 'Winter', 'No']]
+We would like to add children to the node [Season=Winter].
+The available variables that we have still left are ['Temperature', 'Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Temperature all the remaining features have the same value Cold. Thus we close the branch with a leaf node. We add the leaf node [Play=No].
+
+We add a child node [Season=Summer] to the node [root]. This branch classifies 2 feature(s): [['Warm', 'None', 'Summer', 'Yes'], ['Hot', 'Strong', 'Summer', 'Yes']]
+We would like to add children to the node [Season=Summer].
+The available variables that we have still left are ['Temperature', 'Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. Using the variable Temperature we partition the data in the current node, where each partition of the data will be for one of the new branches from the current node [Season=Summer]. We have the following partitions:
+Partition for Temperature=Hot: [['Hot', 'Strong', 'Summer', 'Yes']]
+Partition for Temperature=Warm: [['Warm', 'None', 'Summer', 'Yes']]
+Now, given the partitions, let us form the branches and the child nodes.
+
+We add a child node [Temperature=Hot] to the node [Season=Summer]. This branch classifies 1 feature(s): [['Hot', 'Strong', 'Summer', 'Yes']]
+We would like to add children to the node [Temperature=Hot].
+The available variables that we have still left are ['Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Wind. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Wind all the remaining features have the same value Strong. Thus we close the branch with a leaf node. We add the leaf node [Play=Yes].
+
+We add a child node [Temperature=Warm] to the node [Season=Summer]. This branch classifies 1 feature(s): [['Warm', 'None', 'Summer', 'Yes']]
+We would like to add children to the node [Temperature=Warm].
+The available variables that we have still left are ['Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Wind. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Wind all the remaining features have the same value None. Thus we close the branch with a leaf node. We add the leaf node [Play=Yes].
+
+Now, we have added all the children nodes for the node [Season=Summer].
+
+Now, we have added all the children nodes for the node [root].
+
+Construction of a random decision tree number 3:
+We are given 10 features as the input data. Out of these, we choose randomly 10 features with the replacement that we will use for the construction of this particular random decision tree:
+[['Cold', 'None', 'Spring', 'Yes'], ['Cold', 'None', 'Spring', 'Yes'], ['Hot', 'Strong', 'Summer', 'Yes'], ['Warm', 'None', 'Autumn', 'Yes'], ['Hot', 'Strong', 'Summer', 'Yes'], ['Warm', 'Strong', 'Autumn', 'No'], ['Cold', 'None', 'Spring', 'Yes'], ['Warm', 'Breeze', 'Spring', 'Yes'], ['Cold', 'Breeze', 'Winter', 'No'], ['Hot', 'Breeze', 'Autumn', 'Yes']]
+We start the construction with the root node to create the first node of the tree.
+We would like to add children to the node [root].
+The available variables that we have still left are ['Temperature', 'Wind', 'Season']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Season. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. Using the variable Season we partition the data in the current node, where each partition of the data will be for one of the new branches from the current node [root]. We have the following partitions:
+Partition for Season=Autumn: [['Warm', 'None', 'Autumn', 'Yes'], ['Warm', 'Strong', 'Autumn', 'No'], ['Hot', 'Breeze', 'Autumn', 'Yes']]
+Partition for Season=Spring: [['Cold', 'None', 'Spring', 'Yes'], ['Cold', 'None', 'Spring', 'Yes'], ['Cold', 'None', 'Spring', 'Yes'], ['Warm', 'Breeze', 'Spring', 'Yes']]
+Partition for Season=Winter: [['Cold', 'Breeze', 'Winter', 'No']]
+Partition for Season=Summer: [['Hot', 'Strong', 'Summer', 'Yes'], ['Hot', 'Strong', 'Summer', 'Yes']]
+Now, given the partitions, let us form the branches and the child nodes.
+
+We add a child node [Season=Autumn] to the node [root]. This branch classifies 3 feature(s): [['Warm', 'None', 'Autumn', 'Yes'], ['Warm', 'Strong', 'Autumn', 'No'], ['Hot', 'Breeze', 'Autumn', 'Yes']]
+We would like to add children to the node [Season=Autumn].
+The available variables that we have still left are ['Temperature', 'Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Wind. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. Using the variable Wind we partition the data in the current node, where each partition of the data will be for one of the new branches from the current node [Season=Autumn]. We have the following partitions:
+Partition for Wind=Breeze: [['Hot', 'Breeze', 'Autumn', 'Yes']]
+Partition for Wind=None: [['Warm', 'None', 'Autumn', 'Yes']]
+Partition for Wind=Strong: [['Warm', 'Strong', 'Autumn', 'No']]
+Now, given the partitions, let us form the branches and the child nodes.
+
+We add a child node [Wind=Breeze] to the node [Season=Autumn]. This branch classifies 1 feature(s): [['Hot', 'Breeze', 'Autumn', 'Yes']]
+We would like to add children to the node [Wind=Breeze].
+The available variables that we have still left are ['Temperature']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Temperature all the remaining features have the same value Hot. Thus we close the branch with a leaf node. We add the leaf node [Play=Yes].
+
+We add a child node [Wind=None] to the node [Season=Autumn]. This branch classifies 1 feature(s): [['Warm', 'None', 'Autumn', 'Yes']]
+We would like to add children to the node [Wind=None].
+The available variables that we have still left are ['Temperature']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Temperature all the remaining features have the same value Warm. Thus we close the branch with a leaf node. We add the leaf node [Play=Yes].
+
+We add a child node [Wind=Strong] to the node [Season=Autumn]. This branch classifies 1 feature(s): [['Warm', 'Strong', 'Autumn', 'No']]
+We would like to add children to the node [Wind=Strong].
+The available variables that we have still left are ['Temperature']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Temperature all the remaining features have the same value Warm. Thus we close the branch with a leaf node. We add the leaf node [Play=No].
+
+Now, we have added all the children nodes for the node [Season=Autumn].
+
+We add a child node [Season=Spring] to the node [root]. This branch classifies 4 feature(s): [['Cold', 'None', 'Spring', 'Yes'], ['Cold', 'None', 'Spring', 'Yes'], ['Cold', 'None', 'Spring', 'Yes'], ['Warm', 'Breeze', 'Spring', 'Yes']]
+We would like to add children to the node [Season=Spring].
+The available variables that we have still left are ['Temperature', 'Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. Using the variable Temperature we partition the data in the current node, where each partition of the data will be for one of the new branches from the current node [Season=Spring]. We have the following partitions:
+Partition for Temperature=Cold: [['Cold', 'None', 'Spring', 'Yes'], ['Cold', 'None', 'Spring', 'Yes'], ['Cold', 'None', 'Spring', 'Yes']]
+Partition for Temperature=Warm: [['Warm', 'Breeze', 'Spring', 'Yes']]
+Now, given the partitions, let us form the branches and the child nodes.
+
+We add a child node [Temperature=Cold] to the node [Season=Spring]. This branch classifies 3 feature(s): [['Cold', 'None', 'Spring', 'Yes'], ['Cold', 'None', 'Spring', 'Yes'], ['Cold', 'None', 'Spring', 'Yes']]
+We would like to add children to the node [Temperature=Cold].
+The available variables that we have still left are ['Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Wind. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Wind all the remaining features have the same value None. Thus we close the branch with a leaf node. We add the leaf node [Play=Yes].
+
+We add a child node [Temperature=Warm] to the node [Season=Spring]. This branch classifies 1 feature(s): [['Warm', 'Breeze', 'Spring', 'Yes']]
+We would like to add children to the node [Temperature=Warm].
+The available variables that we have still left are ['Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Wind. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Wind all the remaining features have the same value Breeze. Thus we close the branch with a leaf node. We add the leaf node [Play=Yes].
+
+Now, we have added all the children nodes for the node [Season=Spring].
+
+We add a child node [Season=Winter] to the node [root]. This branch classifies 1 feature(s): [['Cold', 'Breeze', 'Winter', 'No']]
+We would like to add children to the node [Season=Winter].
+The available variables that we have still left are ['Temperature', 'Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Temperature all the remaining features have the same value Cold. Thus we close the branch with a leaf node. We add the leaf node [Play=No].
+
+We add a child node [Season=Summer] to the node [root]. This branch classifies 2 feature(s): [['Hot', 'Strong', 'Summer', 'Yes'], ['Hot', 'Strong', 'Summer', 'Yes']]
+We would like to add children to the node [Season=Summer].
+The available variables that we have still left are ['Temperature', 'Wind']. As there are fewer of them than the parameter m=4, we consider all of them. Out of these variables, the variable with the highest information gain is the variable Temperature. Thus we will branch the node further on this variable. We also remove this variable from the list of the available variables for the children of the current node. For the chosen variable Temperature all the remaining features have the same value Hot. Thus we close the branch with a leaf node. We add the leaf node [Play=Yes].
+
+Now, we have added all the children nodes for the node [root].
+
+Therefore we have completed the construction of the random forest consisting of 4 random decision trees.
+
+***Random Forest graph***
+
+Tree 0:
+Root
+├── [Wind=None]
+│   ├── [Temperature=Cold]
+│   │   └── [Play=Yes]
+│   └── [Temperature=Warm]
+│       ├── [Season=Autumn]
+│       │   └── [Play=Yes]
+│       └── [Season=Summer]
+│           └── [Play=Yes]
+└── [Wind=Strong]
+    ├── [Temperature=Cold]
+    │   └── [Play=No]
+    └── [Temperature=Warm]
+        └── [Play=No]
+
+Tree 1:
+Root
+├── [Season=Autumn]
+│   ├── [Wind=Strong]
+│   │   └── [Play=No]
+│   ├── [Wind=None]
+│   │   └── [Play=Yes]
+│   └── [Wind=Breeze]
+│       └── [Play=Yes]
+├── [Season=Summer]
+│   └── [Play=Yes]
+├── [Season=Winter]
+│   └── [Play=No]
+└── [Season=Spring]
+    ├── [Temperature=Cold]
+    │   └── [Play=Yes]
+    └── [Temperature=Warm]
+        └── [Play=Yes]
+
+Tree 2:
+Root
+├── [Season=Autumn]
+│   ├── [Temperature=Hot]
+│   │   └── [Play=Yes]
+│   └── [Temperature=Warm]
+│       └── [Play=No]
+├── [Season=Spring]
+│   ├── [Temperature=Cold]
+│   │   └── [Play=Yes]
+│   └── [Temperature=Warm]
+│       └── [Play=Yes]
+├── [Season=Winter]
+│   └── [Play=No]
+└── [Season=Summer]
+    ├── [Temperature=Hot]
+    │   └── [Play=Yes]
+    └── [Temperature=Warm]
+        └── [Play=Yes]
+
+Tree 3:
+Root
+├── [Season=Autumn]
+│   ├── [Wind=Breeze]
+│   │   └── [Play=Yes]
+│   ├── [Wind=None]
+│   │   └── [Play=Yes]
+│   └── [Wind=Strong]
+│       └── [Play=No]
+├── [Season=Spring]
+│   ├── [Temperature=Cold]
+│   │   └── [Play=Yes]
+│   └── [Temperature=Warm]
+│       └── [Play=Yes]
+├── [Season=Winter]
+│   └── [Play=No]
+└── [Season=Summer]
+    └── [Play=Yes]
+
+Total number of trees in the random forest=4.
+The maximum number of the variables considered at the node is m=4.
+
+***Classification***
+
+Feature: ['Warm', 'Strong', 'Spring', '?']
+Tree 0 votes for the class: No
+Tree 1 votes for the class: Yes
+Tree 2 votes for the class: Yes
+Tree 3 votes for the class: Yes
+The class with the maximum number of votes is 'Yes'. Thus the constructed random forest classifies the feature ['Warm', 'Strong', 'Spring', '?'] into the class 'Yes'.

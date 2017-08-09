@@ -1,0 +1,12 @@
+Temperature,Wind,Play
+Cold,Strong,No
+Warm,Strong,No
+Warm,None,Yes
+Hot,None,No
+Hot,Breeze,Yes
+Warm,Breeze,Yes
+Cold,Breeze,No
+Cold,None,Yes
+Hot,Strong,Yes
+Warm,None,Yes
+Warm,Strong,?

@@ -1,0 +1,8 @@
+swimming_suit,water_temperature,swim
+None,Cold,No
+None,Warm,No
+Small,Cold,No
+Small,Warm,No
+Good,Cold,No
+Good,Warm,Yes
+Good,Cold,?
