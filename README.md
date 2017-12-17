@@ -14,9 +14,4 @@ This book will address the problems related to accurate and efficient data class
   
   
 * [Hands-On Data Science and Python Machine Learning](https://www.packtpub.com/big-data-and-business-intelligence/hands-data-science-and-python-machine-learning?utm_source=github&utm_medium=repository&utm_content=9781787280748)
-  
- 
 
-### Suggestions and Feedback
-  
-[Click here](https://docs.google.com/forms/d/e/1FAIpQLSe5qwunkGf6PUvzPirPDtuy1Du5Rlzew23UBp2S-P3wB-GcwQ/viewform) if you have any feedback or suggestions.
