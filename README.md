@@ -15,3 +15,7 @@ This book will address the problems related to accurate and efficient data class
   
 * [Hands-On Data Science and Python Machine Learning](https://www.packtpub.com/big-data-and-business-intelligence/hands-data-science-and-python-machine-learning?utm_source=github&utm_medium=repository&utm_content=9781787280748)
 
+### Download a free PDF
+
+ <i>If you have already purchased a print or Kindle version of this book, you can get a DRM-free PDF version at no cost.<br>Simply click on the link to claim your free PDF.</i>
+<p align="center"> <a href="https://packt.link/free-ebook/9781787284586">https://packt.link/free-ebook/9781787284586 </a> </p>
